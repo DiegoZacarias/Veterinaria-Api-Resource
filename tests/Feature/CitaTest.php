@@ -34,14 +34,34 @@ class CitaTest extends TestCase
     /** @test */
     public function se_pueden_listar_todas_las_citas()
     {
-        $citas = factory(Cita::class,3)->create();
+        $citas = factory(Cita::class,2)->create();
 
-       
+        
+
         $response = $this->json('GET', route('citas.index'));
         $response
-            ->assertStatus(200);
-
-        // $this->assertInstanceOf(Collection::class,$citas);
+            ->assertStatus(200)
+            ->assertJson([
+                [     
+                      'id' => $citas[0]->id, 
+                      'nombre_mascota' => $citas[0]->nombre_mascota,
+                      'nombre_dueno' => $citas[0]->nombre_dueno,
+                      'fecha' => $citas[0]->fecha,
+                      'hora' => $citas[0]->hora,
+                      'sintomas' => $citas[0]->sintomas 
+                ],    
+                [     
+                      'id' => $citas[1]->id, 
+                      'nombre_mascota' => $citas[1]->nombre_mascota,
+                      'nombre_dueno' => $citas[1]->nombre_dueno,
+                      'fecha' => $citas[1]->fecha,
+                      'hora' => $citas[1]->hora,
+                      'sintomas' => $citas[1]->sintomas
+                ]
+            ])
+            ->assertJsonStructure([
+                '*' => ['id', 'nombre_mascota', 'nombre_dueno', 'fecha', 'hora','sintomas'],
+            ]);
 
     }
 
