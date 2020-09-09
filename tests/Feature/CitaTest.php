@@ -13,7 +13,7 @@ class CitaTest extends TestCase
     
 
   /** @test */
-  public function se_puede_agregar_citas()
+  public function se_pueden_agregar_citas()
   {
       $fields = [
           'nombre_mascota' => 'Ketti',
@@ -24,18 +24,37 @@ class CitaTest extends TestCase
       ];
 
       $this->withoutExceptionHandling();
-      $this->post(route('citas.store'),$fields); //store
+
+      $response = $this->json('POST', route('citas.store'),$fields);  
+        $response->assertStatus(201);
 
       $this->assertDatabaseHas('citas',$fields);
   }
 
     /** @test */
-    public function se_puede_listas_todas_las_citas()
+    public function se_pueden_listar_todas_las_citas()
     {
-        $citas = factory(Cita::class)->create();
+        $citas = factory(Cita::class,3)->create();
 
-        $this->withoutExceptionHandling();
-        $this->get(route('citas.index'))->assertStatus(200);
+       
+        $response = $this->json('GET', route('citas.index'));
+        $response
+            ->assertStatus(200);
+
+        // $this->assertInstanceOf(Collection::class,$citas);
 
     }
+
+    /** @test */
+    public function se_puede_eliminar_la_lista()
+    {
+        $cita = factory(Cita::class)->create();
+
+        $response = $this->json('DELETE', route('citas.destroy',$cita->id));  
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('citas',['id' => $cita->id]);
+    }
 }
+
+

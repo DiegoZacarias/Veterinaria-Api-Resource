@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 
  Route::apiResource('citas', 'API\CitaController')->except([
-    'create', 'edit','show','update'
+    'show','update'
 ]);
