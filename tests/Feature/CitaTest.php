@@ -75,6 +75,25 @@ class CitaTest extends TestCase
 
         $this->assertDatabaseMissing('citas',['id' => $cita->id]);
     }
+
+    /** @test */
+    public function se_puede_mostrar_cada_cita()
+    {
+        $cita = factory(Cita::class)->create();
+
+        $response = $this->json('GET',route('citas.show',$cita->id));
+
+        $response->assertStatus(200)
+                ->assertJson([
+                     
+                      'id' => $cita->id, 
+                      'nombre_mascota' => $cita->nombre_mascota,
+                      'nombre_dueno' => $cita->nombre_dueno,
+                      'fecha' => $cita->fecha,
+                      'hora' => $cita->hora,
+                      'sintomas' => $cita->sintomas 
+                ]);
+    }
 }
 
 

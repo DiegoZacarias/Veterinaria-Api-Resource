@@ -71,9 +71,14 @@ class CitaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cita $cita)
     {
-        return false;
+        // return false;
+        // dd($cita);
+
+        return response()->json($cita,200);
+
+
     }
 
     /**
