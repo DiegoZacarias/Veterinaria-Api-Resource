@@ -94,6 +94,30 @@ class CitaTest extends TestCase
                       'sintomas' => $cita->sintomas 
                 ]);
     }
+
+    /** @test */
+    public function se_pueden_editar_las_citas()
+    {
+        $cita = factory(Cita::class)->create();
+
+        $fields = [
+          'nombre_mascota' => 'Tommy',
+          'nombre_dueno' => 'Diego'
+        ];
+
+        $this->assertDatabaseHas('citas',['nombre_mascota' => $cita->nombre_mascota]);
+
+        $this->assertDatabaseMissing('citas',['nombre_mascota' => 'Tommy']);
+
+        $this->withoutExceptionHandling();
+        
+        $response = $this->json('PUT',route('citas.update',$cita->id),$fields);
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('citas',['nombre_mascota' => 'Tommy']);
+
+
+    }
 }
 
 
